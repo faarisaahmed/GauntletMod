@@ -6,14 +6,10 @@
       Unity starts, so netstandard2.0 is the safe target here (not 2.1).
     -->
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Nullable>disable</Nullable>
     <AssemblyName>GauntletMod.Patcher</AssemblyName>
     <RootNamespace>GauntletMod.Patcher</RootNamespace>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
 
-    <!-- Same install path as the plugin project; keep the two in sync. -->
-    <GamePath>/Users/faaris/Downloads/Silksong.app/Contents/SharedSupport/prefix/drive_c/GOG Games/Hollow Knight Silksong</GamePath>
   </PropertyGroup>
 
   <ItemGroup>

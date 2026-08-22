@@ -4,21 +4,44 @@ A Silksong mod that adds a **Custom Gauntlet** game mode. Picking it from the Ne
 menu skips the opening cutscene and drops you into the Grand Forum with every ability
 and tool unlocked, a bench to rest at, and an arena that runs waves you built yourself.
 
-## Build
+## Install
+
+Grab `CustomGauntlet.zip` from [Releases](../../releases) and merge its `plugins` and
+`patchers` folders into your `BepInEx` folder. Requires BepInEx 5.
+
+## Build from source
 
 ```
 dotnet build -c Release
 ```
 
-Builds both halves and copies each into place:
+Builds both projects and copies each into place:
 
 ```
-GauntletMod.csproj    plugin  -> BepInEx/plugins/GauntletMod/GauntletMod.dll
-Patcher/              patcher -> BepInEx/patchers/GauntletMod/GauntletMod.Patcher.dll
+GauntletMod          -> BepInEx/plugins/GauntletMod/GauntletMod.dll
+GauntletMod.Patcher  -> BepInEx/patchers/GauntletMod/GauntletMod.Patcher.dll
 ```
 
-Both `<GamePath>` lines — root csproj and `Patcher/GauntletMod.Patcher.csproj` — need to
-match if the game ever moves.
+The only thing a new machine needs to change is where the game lives. Rather than edit
+a tracked file, drop a `LocalPaths.props` next to `Directory.Build.props` — it's
+gitignored and overrides the default:
+
+```xml
+<Project>
+  <PropertyGroup>
+    <GamePath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong</GamePath>
+  </PropertyGroup>
+</Project>
+```
+
+## Layout
+
+```
+GauntletMod.sln
+Directory.Build.props        game path, shared by both projects
+GauntletMod/                 the plugin
+GauntletMod.Patcher/         the BepInEx preloader patcher
+```
 
 ## Controls
 
@@ -31,6 +54,8 @@ match if the game ever moves.
 | `-` / `=` | Camera zoom out / in |
 
 ## Files
+
+All under `GauntletMod/` unless noted.
 
 | File | Job |
 | --- | --- |
@@ -54,6 +79,7 @@ match if the game ever moves.
 | `DebugOverlay.cs` | camera zoom |
 | `SceneCatalog.cs` | checks a scene exists before loading it can hang the game |
 | `GauntletManager.cs` | scene watching, hotkeys, dev menu, watchdog |
+| `GauntletMod.Patcher/Patcher.cs` | the preloader patcher |
 
 ---
 

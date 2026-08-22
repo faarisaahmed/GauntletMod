@@ -2,6 +2,12 @@
 bin/
 obj/
 
+# Local machine paths - see Directory.Build.props
+LocalPaths.props
+
+# Packaged release
+CustomGauntlet.zip
+
 # macOS
 .DS_Store
 

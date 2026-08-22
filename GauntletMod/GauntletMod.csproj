@@ -2,35 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <Nullable>disable</Nullable>
     <AssemblyName>GauntletMod</AssemblyName>
     <RootNamespace>GauntletMod</RootNamespace>
 
-    <!--
-      Porting Kit wrapper install (Mac). This is the path INSIDE the .app bundle's
-      Wine prefix where the actual Windows game files live.
-    -->
-    <GamePath>/Users/faaris/Downloads/Silksong.app/Contents/SharedSupport/prefix/drive_c/GOG Games/Hollow Knight Silksong</GamePath>
-    <ManagedPath>$(GamePath)/Hollow Knight Silksong_Data/Managed</ManagedPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <!-- The patcher lives in its own project; keep its sources out of this one's
-         default compile glob. -->
-    <Compile Remove="Patcher/**" />
-    <None Remove="Patcher/**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- The patcher half of the mod. Building this project builds that one too, so
-         `dotnet build -c Release` from this folder still does everything. It's not
-         referenced as code - the two halves only meet at runtime. -->
-    <ProjectReference Include="Patcher/GauntletMod.Patcher.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <Private>false</Private>
-    </ProjectReference>
-  </ItemGroup>
 
   <ItemGroup>
     <!-- BepInEx / Harmony come from the BepInEx pack you already installed -->

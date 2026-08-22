@@ -1,0 +1,28 @@
+<Project>
+
+  <!--
+    Where the game lives. Both projects reference the game's assemblies and copy their
+    output into BepInEx, so this is the one thing a new machine has to change.
+
+    Rather than edit this file (and have git track your local path), create a
+    LocalPaths.props next to it - it's gitignored and wins over the default below:
+
+      <Project>
+        <PropertyGroup>
+          <GamePath>C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight Silksong</GamePath>
+        </PropertyGroup>
+      </Project>
+  -->
+  <PropertyGroup>
+    <GamePath Condition="'$(GamePath)' == ''">/Users/faaris/Downloads/Silksong.app/Contents/SharedSupport/prefix/drive_c/GOG Games/Hollow Knight Silksong</GamePath>
+    <ManagedPath>$(GamePath)/Hollow Knight Silksong_Data/Managed</ManagedPath>
+  </PropertyGroup>
+
+  <Import Project="LocalPaths.props" Condition="Exists('LocalPaths.props')" />
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+</Project>
