@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      BepInEx 5 preloader patchers are loaded into the Mono/.NET 4.x runtime before
+      Unity starts, so netstandard2.0 is the safe target here (not 2.1).
+    -->
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>GauntletMod.Patcher</AssemblyName>
+    <RootNamespace>GauntletMod.Patcher</RootNamespace>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+
+    <!-- Same install path as the plugin project; keep the two in sync. -->
+    <GamePath>/Users/faaris/Downloads/Silksong.app/Contents/SharedSupport/prefix/drive_c/GOG Games/Hollow Knight Silksong</GamePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(GamePath)/BepInEx/core/BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- Cecil is what preloader patchers edit the assembly through. -->
+    <Reference Include="Mono.Cecil">
+      <HintPath>$(GamePath)/BepInEx/core/Mono.Cecil.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Patchers go in BepInEx/patchers/, NOT BepInEx/plugins/. -->
+  <Target Name="CopyToPatchers" AfterTargets="Build">
+    <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll"
+          DestinationFolder="$(GamePath)/BepInEx/patchers/GauntletMod/" />
+  </Target>
+
+</Project>

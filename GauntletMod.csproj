@@ -1,0 +1,111 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>GauntletMod</AssemblyName>
+    <RootNamespace>GauntletMod</RootNamespace>
+
+    <!--
+      Porting Kit wrapper install (Mac). This is the path INSIDE the .app bundle's
+      Wine prefix where the actual Windows game files live.
+    -->
+    <GamePath>/Users/faaris/Downloads/Silksong.app/Contents/SharedSupport/prefix/drive_c/GOG Games/Hollow Knight Silksong</GamePath>
+    <ManagedPath>$(GamePath)/Hollow Knight Silksong_Data/Managed</ManagedPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The patcher lives in its own project; keep its sources out of this one's
+         default compile glob. -->
+    <Compile Remove="Patcher/**" />
+    <None Remove="Patcher/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The patcher half of the mod. Building this project builds that one too, so
+         `dotnet build -c Release` from this folder still does everything. It's not
+         referenced as code - the two halves only meet at runtime. -->
+    <ProjectReference Include="Patcher/GauntletMod.Patcher.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- BepInEx / Harmony come from the BepInEx pack you already installed -->
+    <Reference Include="BepInEx">
+      <HintPath>$(GamePath)/BepInEx/core/BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(GamePath)/BepInEx/core/0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <!-- Game / Unity assemblies -->
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(ManagedPath)/Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(ManagedPath)/UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(ManagedPath)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(ManagedPath)/UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- FontStyle / TextAnchor, used by the wave panel's GUIStyles -->
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(ManagedPath)/UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(ManagedPath)/UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- Menu button cloning (Text / Selectable / LayoutGroup) -->
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(ManagedPath)/UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(ManagedPath)/UnityEngine.UIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- Sealing the arena's exits (Collider2D) -->
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>$(ManagedPath)/UnityEngine.Physics2DModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- Additive scene loading, for lifting a bench out of a donor room -->
+    <Reference Include="Unity.Addressables">
+      <HintPath>$(ManagedPath)/Unity.Addressables.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>$(ManagedPath)/Unity.ResourceManager.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- AutoLocalizeTextUI's LocalisedString lives here -->
+    <Reference Include="TeamCherry.Localization">
+      <HintPath>$(ManagedPath)/TeamCherry.Localization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="PlayMaker">
+      <HintPath>$(ManagedPath)/PlayMaker.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- After building, auto-copy the DLL into your plugins folder -->
+  <Target Name="CopyToPlugins" AfterTargets="Build">
+    <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(GamePath)/BepInEx/plugins/GauntletMod/" />
+  </Target>
+
+</Project>
